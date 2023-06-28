@@ -4,9 +4,9 @@
 
 general:
   debug: false
-  replicaCount: 1
+  replicaCount: 3
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: camunda-bpm-platform-v7-rest
 
 # Set deployment initContainers for any pre-startup proposes.
 initContainers: []
@@ -16,18 +16,17 @@ annotations: {}
 
 image:
   repository: camunda/camunda-bpm-platform
-  tag: latest
+  tag: run-latest
   pullPolicy: IfNotPresent
   pullSecrets: []
-  command: []
-  args: []
+  command: ['./camunda.sh']
+  args: ['--rest', '--webapps', '--swaggerui']
 
 # Extra environment variables to customize the deployment.
 # For more details: https://github.com/camunda/docker-camunda-bpm-platform
-extraEnvs: []
-# Example:
-# - name: DB_VALIDATE_ON_BORROW
-#   value: false
+extraEnvs:
+- name: DB_VALIDATE_ON_BORROW
+  value: "false"
 
 # Extra containers to have sidecars
 extraContainers: []
@@ -36,13 +35,13 @@ extraContainers: []
 # however, H2 is not supported in a clustered scenario.
 # So for real-world workloads, an external database like PostgreSQL should be used.
 database:
-  driver: org.h2.Driver
-  url: jdbc:h2:./camunda-h2-dbs/process-engine
+  driver: org.postgresql.Driver
+  url: jdbc:postgresql://cluster-example-rw:5432/process-engine
   credentialsSecretEnabled: true
-  credentialsSecretName: ""
+  credentialsSecretName: cluster-example-app
   credentialsSecretKeys:
-    username: DB_USERNAME
-    password: DB_PASSWORD
+    username: username
+    password: password
 
 service:
   enabled: true
@@ -93,17 +92,17 @@ readinessProbe:
   enabled: true
   config:
     httpGet:
-      path: /camunda/
+      path: /engine-rest/incident/count
       port: http
     initialDelaySeconds: 120
     periodSeconds: 60
 
 # An arbitrary use of livenessProbe could make a lot of service interruption, use it wisely.
 livenessProbe:
-  enabled: false
+  enabled: true
   config:
     httpGet:
-      path: /camunda/
+      path: /engine-rest/incident/count
       port: http
     initialDelaySeconds: 120
     periodSeconds: 60
