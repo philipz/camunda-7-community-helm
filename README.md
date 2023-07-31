@@ -1,4 +1,4 @@
-# Camunda Community Helm
+# Camunda Community Helm and CloudNativePG
 
 ![Community Extension](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)
 [![Lifecycle:Incubating](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
@@ -13,6 +13,26 @@ Camunda public Kubernetes Helm repo and charts.
 > then go to the official [**Camunda Platform 8** Helm repo](https://github.com/camunda/camunda-platform-helm).
 
 ## Repository
+
+## Install CloudNativePG
+
+1. Install Operator
+```
+kubectl apply -f \
+  https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.20/releases/cnpg-1.20.2.yaml
+```
+
+2. Create Namespace and Apply YAML
+```
+k create ns camunda
+k apply -f cluster-example.yaml
+```
+
+3. Install Camunda Charts
+```
+cd charts/camunda-bpm-platform
+helm install --namespace camunda camunda .
+```
 
 ```sh
 $ helm repo add camunda https://helm.cch.camunda.cloud

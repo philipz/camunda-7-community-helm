@@ -8,12 +8,10 @@ spec:
     #  superuserSecret:
     #name: superuser-secret
 
-    #  bootstrap:
-    #initdb:
-    #  database: app
-    #  owner: app
-    #  secret:
-    #    name: app-secret
+  bootstrap:
+    initdb:
+      database: process-engine
+      owner: app
 
   storage:
     size: 1Gi
