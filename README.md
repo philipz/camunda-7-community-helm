@@ -14,7 +14,7 @@ Camunda public Kubernetes Helm repo and charts.
 
 ## Repository
 
-## Install CloudNativePG
+### Install CloudNativePG
 
 1. Install Operator
 ```
@@ -24,19 +24,21 @@ kubectl apply -f \
 
 2. Create Namespace and Apply YAML
 ```
-k create ns camunda
-k apply -f cluster-example.yaml
+kubectl create ns camunda
+kubectl apply -f ./CloudNativePG/cluster-example.yaml
 ```
 
-3. Install Camunda Charts
+### Install Camunda 7
+
+1. Install Camunda Charts
+```
+helm repo add camunda https://helm.cch.camunda.cloud
+helm repo update
+```
+2. Helm install
 ```
 cd charts/camunda-bpm-platform
 helm install --namespace camunda camunda .
-```
-
-```sh
-$ helm repo add camunda https://helm.cch.camunda.cloud
-$ helm repo update
 ```
 
 ## Charts
